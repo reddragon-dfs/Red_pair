@@ -62,35 +62,42 @@ router.get('/', async (req, res) => {
                     
                     let session = await Pair_Code_By_Mbuvi_Tech.sendMessage(
                         Pair_Code_By_Mbuvi_Tech.user.id,
-                        { text: 'trashcore~' + b64data }
+                        { text: 'darkness!' + b64data }
                     );
 
                     let Mbuvi_MD_TEXT = `
         
-╔════════════════════◇
-║『 SESSION CONNECTED』
-║ 🔷 Trashcore Bot
-║ 🔷 By Trashcore 
-╚════════════════════╝
+╔═════ஜ۩۞۩ஜ═════╗
+║ ╚»CONNECTED«╝
+║ ✨RED-XMD🔷
+║ ✨ DFS🔷
+╚─━━━━━━░★░━━━━━━─╝
 
 
 ---
 
-╔════════════════════◇
-║『 You've chosen Trashcore Bots』
-║ -Set the session ID in Heroku:
+╔═════ஜ۩۞۩ஜ═════╗
+║『  DFS SESSION«╝
+║ -Set Heroku,Render etc
 ║ - SESSION_ID: 
-╚════════════════════╝
-╔════════════════════◇
-║web: www.trashcorehub.zone.id
-╚═════════════════════╝
-𒂀 TRASHBOTS
+╚─━━━━━━░★░━━━━━━─╝
+╔═════ஜ۩۞۩ஜ═════╗
+║ 『••• _V𝗶𝘀𝗶𝘁 𝗙𝗼𝗿_H𝗲𝗹𝗽 •••』
+║❍ 𝐘𝐨𝐮𝐭𝐮𝐛𝐞: youtube.com/@SibongakonkeThalente
+║❍ 𝐎𝐰𝐧𝐞𝐫: 27634988678
+║❍ 𝐑𝐞𝐩𝐨: https://github.com/darknessfreenetsquad/red_xmd 
+║❍ 𝐖𝐚𝐆𝗿𝐨𝐮𝐩: https://chat.whatsapp.com/KLI1Cl1dP6Y3gdHptdAiBn?mode=gi_t
+║❍ 𝐖𝐚𝐂𝐡𝐚𝐧𝐧𝐞𝐥: https://whatsapp.com/channel/0029Vb4HUnJAjPXOWnELU82J
+║❍ 𝐈𝐧𝐬𝐭𝐚𝐠𝐫𝐚𝐦: _loading . . ._
+║ ☬ ☬ ☬ ☬
+╚─━━━━━━░★░━━━━━━─╝
+𒂀 Enjoy *RED* XMD
 
 
 ---
 
-Don't Forget To Give Star⭐ To My Repo
-______________________________`;
+ Give Star⭐ To My Repo
+╚─━━━━━━░★░━━━━━━─╝`;
 
                     await Pair_Code_By_Mbuvi_Tech.sendMessage(
                         Pair_Code_By_Mbuvi_Tech.user.id,

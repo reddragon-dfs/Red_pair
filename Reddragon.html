@@ -1,0 +1,738 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Red XMD WhatsApp Bot | Deploy with Pair Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, 'Inter', sans-serif;
+            min-height: 100vh;
+            background: #0a0202;
+            color: #ffd9d9;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeSlideDown 0.9s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #ff4d4d, #ff1a1a, #cc0000);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.85;
+            margin-top: 0.5rem;
+        }
+
+        .repo-badge {
+            background: #1e0a0a;
+            border: 1px solid #ff4d4d80;
+            border-radius: 2rem;
+            padding: 0.5rem 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-top: 1rem;
+            font-family: monospace;
+        }
+
+        .repo-badge a {
+            color: #ff8888;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .repo-badge a:hover {
+            color: #ff4444;
+        }
+
+        /* Pair Code Section */
+        .pair-section {
+            background: linear-gradient(135deg, rgba(30, 8, 8, 0.95), rgba(20, 5, 5, 0.98));
+            backdrop-filter: blur(12px);
+            border-radius: 1.5rem;
+            padding: 1.8rem;
+            margin: 1.5rem 0 2rem;
+            border: 2px solid #ff4d4d;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3);
+        }
+
+        .pair-title {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .pair-input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.2rem 0;
+            align-items: center;
+        }
+
+        .pair-input-group input {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.9rem 1rem;
+            border-radius: 0.8rem;
+            border: 1px solid #ff5e5e;
+            background: #2a0f0f;
+            color: #ffdddd;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .pair-input-group input:focus {
+            outline: none;
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .pair-input-group button {
+            background: #7f1a1a;
+            border: none;
+            padding: 0.9rem 1.5rem;
+            border-radius: 0.8rem;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .pair-input-group button:hover {
+            background: #b91c1c;
+            transform: scale(1.02);
+        }
+
+        .pair-help {
+            font-size: 0.85rem;
+            color: #ffaaaa;
+            background: rgba(0,0,0,0.5);
+            padding: 1rem;
+            border-radius: 0.8rem;
+            margin-top: 0.8rem;
+            border-left: 3px solid #ff4d4d;
+        }
+
+        .pair-help code {
+            background: #3a1515;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.3rem;
+            font-family: monospace;
+        }
+
+        .warning-text {
+            color: #ff8888;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Deployment grid */
+        .deploy-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0 3rem;
+        }
+
+        .card {
+            background: rgba(20, 5, 5, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 1.8rem;
+            border: 1px solid rgba(255, 60, 60, 0.5);
+            padding: 1.5rem;
+            width: 330px;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #ff3a3a;
+            box-shadow: 0 20px 35px -8px rgba(255, 0, 0, 0.3);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .card .method {
+            font-size: 0.75rem;
+            background: #2c0f0f;
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+        }
+
+        .env-list {
+            text-align: left;
+            background: rgba(0,0,0,0.5);
+            border-radius: 0.8rem;
+            padding: 0.8rem;
+            margin: 1rem 0;
+            font-size: 0.75rem;
+            font-family: monospace;
+        }
+
+        .env-list span {
+            color: #ffaaaa;
+            display: block;
+            padding: 0.2rem 0;
+        }
+
+        .env-list strong {
+            color: #ff6666;
+        }
+
+        .deploy-btn {
+            background: linear-gradient(95deg, #b91c1c, #7f1a1a);
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 0.8rem 1.2rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+
+        .deploy-btn:hover {
+            background: linear-gradient(95deg, #e03a3a, #a12222);
+            transform: scale(0.98);
+        }
+
+        .methods-section {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .methods-flex {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .method-chip {
+            background: #2a0c0c;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            border-left: 3px solid #ff4d4d;
+            font-size: 0.85rem;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px dashed #ff5e5e60;
+            font-size: 0.8rem;
+        }
+
+        .toast-message {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f0a0aee;
+            backdrop-filter: blur(16px);
+            border: 1px solid #ff5e5e;
+            padding: 12px 24px;
+            border-radius: 40px;
+            z-index: 200;
+            opacity: 0;
+            transition: 0.2s;
+            pointer-events: none;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .toast-message.show {
+            opacity: 1;
+        }
+
+        @keyframes fadeSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 750px) {
+            .hero h1 { font-size: 2rem; }
+            .card { width: 280px; }
+            .toast-message { white-space: normal; width: 85%; text-align: center; }
+            .pair-title { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="content">
+        <div class="hero">
+            <h1>🔴 RED XMD WHATSAPP BOT 🔴</h1>
+            <p>Deploy with Pair Code | Render · Heroku · Railway</p>
+            <div class="repo-badge">
+                📦 GitHub Repository → 
+                <a href="https://github.com/darknessfreenetsquad/red_xmd" target="_blank">
+                    github.com/darknessfreenetsquad/red_xmd
+                </a>
+            </div>
+        </div>
+
+        <!-- PAIR CODE INPUT SECTION (ENV VARIABLE) -->
+        <div class="pair-section">
+            <div class="pair-title">
+                🔐 <strong>Pair Code (Environment Variable)</strong>
+                <span style="font-size: 0.75rem; background: #7f1a1a; padding: 0.2rem 0.8rem; border-radius: 20px;">Required for WhatsApp Auth</span>
+            </div>
+            <div class="pair-input-group">
+                <input type="text" id="pairCodeInput" placeholder="Enter your WhatsApp Pairing Code here..." autocomplete="off">
+                <button id="savePairBtn">💾 Save Pair Code</button>
+                <button id="generatePairBtn">🔄 Get Pair Code Guide</button>
+            </div>
+            <div class="pair-help">
+                📱 <strong>How to get Pair Code:</strong><br>
+                1. Run the bot locally once using <code>npm start</code> or <code>node index.js</code><br>
+                2. The bot will display a pairing code or QR code in terminal<br>
+                3. Enter the 8-digit pairing code in WhatsApp → Linked Devices → Link with Phone Number<br>
+                4. OR use <code>node pair.js</code> if available in your red_xmd repo<br>
+                5. Copy the generated PAIR_CODE and paste it above ⬆️
+                <div class="warning-text">⚠️ Without a valid Pair Code, the WhatsApp bot won't authenticate!</div>
+            </div>
+        </div>
+
+        <!-- DEPLOYMENT METHODS SECTION -->
+        <div class="methods-section">
+            <h3>🚀 One-Click Deployment Methods</h3>
+            <div class="methods-flex">
+                <div class="method-chip">🌐 Render · Web Service + Blueprint</div>
+                <div class="method-chip">🐙 Heroku · GitHub Repo Method</div>
+                <div class="method-chip">🛤️ Railway · Git Connect</div>
+            </div>
+            <p style="margin-top: 10px; font-size: 0.8rem;">⬇️ Click any card below to deploy with your Pair Code ⬇️</p>
+        </div>
+
+        <!-- DEPLOYMENT CARDS -->
+        <div class="deploy-grid">
+            <!-- Render Card -->
+            <div class="card">
+                <div class="card-icon">🟣</div>
+                <h2>Render</h2>
+                <div class="method">Web Service + Blueprint</div>
+                <div class="env-list">
+                    <span><strong>🔹 PAIR_CODE</strong> = your_pair_code_here</span>
+                    <span>🔹 SESSION_ID = auto_generated</span>
+                    <span>🔹 PREFIX = . (or !)</span>
+                    <span>🔹 MEGA_EMAIL = optional</span>
+                </div>
+                <button class="deploy-btn" id="renderBtn">🚀 Deploy on Render</button>
+                <div style="font-size: 0.7rem; margin-top: 8px;">Add PAIR_CODE in Environment Variables</div>
+            </div>
+
+            <!-- Heroku Card -->
+            <div class="card">
+                <div class="card-icon">💜</div>
+                <h2>Heroku</h2>
+                <div class="method">GitHub Repo Method</div>
+                <div class="env-list">
+                    <span><strong>🔹 PAIR_CODE</strong> = your_pair_code_here</span>
+                    <span>🔹 HEROKU_APP_NAME = red-xmd-bot</span>
+                    <span>🔹 WA_PREFIX = .</span>
+                </div>
+                <button class="deploy-btn" id="herokuBtn">🌊 Deploy on Heroku</button>
+                <div style="font-size: 0.7rem; margin-top: 8px;">Config Vars → Add PAIR_CODE</div>
+            </div>
+
+            <!-- Railway Card -->
+            <div class="card">
+                <div class="card-icon">🚂</div>
+                <h2>Railway</h2>
+                <div class="method">Git Repo + Variables</div>
+                <div class="env-list">
+                    <span><strong>🔹 PAIR_CODE</strong> = your_pair_code_here</span>
+                    <span>🔹 DATABASE_URL = auto_provided</span>
+                    <span>🔹 BOT_NAME = RedXMD</span>
+                </div>
+                <button class="deploy-btn" id="railwayBtn">🛤️ Deploy on Railway</button>
+                <div style="font-size: 0.7rem; margin-top: 8px;">Import from GitHub → Add PAIR_CODE</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            ⚡ <strong>PAIR_CODE is required for WhatsApp authentication</strong> — Save it before deploying!<br>
+            🔒 Your Pair Code stays in your browser storage until deployment. Never share it publicly!
+        </div>
+    </div>
+
+    <div id="toastMsg" class="toast-message">✨ Ready</div>
+
+    <script>
+        // ========== CANVAS RED PARTICLES ==========
+        const canvas = document.getElementById('particle-canvas');
+        let ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationId;
+        let mouseX = null, mouseY = null;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor(x, y, radius, speedX, speedY, color, alpha) {
+                this.x = x; this.y = y; this.radius = radius;
+                this.speedX = speedX; this.speedY = speedY;
+                this.color = color; this.alpha = alpha;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.alpha})`;
+                ctx.fill();
+                if(this.radius > 3) {
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = "#ff4d4d";
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x + this.radius < 0) this.x = canvas.width + this.radius;
+                if (this.x - this.radius > canvas.width) this.x = -this.radius;
+                if (this.y + this.radius < 0) this.y = canvas.height + this.radius;
+                if (this.y - this.radius > canvas.height) this.y = -this.radius;
+                
+                if (mouseX !== null && mouseY !== null) {
+                    let dx = mouseX - this.x;
+                    let dy = mouseY - this.y;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < 100) {
+                        let force = (100 - dist) / 300;
+                        let angle = Math.atan2(dy, dx);
+                        this.speedX += Math.cos(angle) * force * 0.2;
+                        this.speedY += Math.sin(angle) * force * 0.2;
+                        let maxSpeed = 2.2;
+                        if (Math.abs(this.speedX) > maxSpeed) this.speedX = this.speedX > 0 ? maxSpeed : -maxSpeed;
+                        if (Math.abs(this.speedY) > maxSpeed) this.speedY = this.speedY > 0 ? maxSpeed : -maxSpeed;
+                    }
+                }
+                this.speedX *= 0.99;
+                this.speedY *= 0.99;
+                this.alpha = this.alpha + Math.sin(Date.now() * 0.003) * 0.02;
+                this.alpha = Math.min(0.9, Math.max(0.3, this.alpha));
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for(let i = 0; i < 150; i++) {
+                let radius = 2 + Math.random() * 4;
+                let x = Math.random() * canvas.width;
+                let y = Math.random() * canvas.height;
+                let speedX = (Math.random() - 0.5) * 0.8;
+                let speedY = (Math.random() - 0.5) * 0.8;
+                let r = 180 + Math.floor(Math.random() * 75);
+                let g = 20 + Math.floor(Math.random() * 50);
+                let b = 20 + Math.floor(Math.random() * 40);
+                let alpha = 0.5 + Math.random() * 0.4;
+                particles.push(new Particle(x, y, radius, speedX, speedY, {r, g, b}, alpha));
+            }
+        }
+
+        function drawBackground() {
+            let grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            grad.addColorStop(0, '#0a0101');
+            grad.addColorStop(1, '#1a0303');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function animate() {
+            drawBackground();
+            for (let p of particles) {
+                p.update();
+                p.draw();
+            }
+            animationId = requestAnimationFrame(animate);
+        }
+
+        function handleMouseMove(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            mouseX = (e.clientX - rect.left) * scaleX;
+            mouseY = (e.clientY - rect.top) * scaleY;
+            if (mouseX < 0 || mouseX > canvas.width || mouseY < 0 || mouseY > canvas.height) {
+                mouseX = null; mouseY = null;
+            }
+        }
+
+        canvas.addEventListener('mousemove', handleMouseMove);
+        canvas.addEventListener('mouseleave', () => { mouseX = null; mouseY = null; });
+        window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
+        resizeCanvas();
+        initParticles();
+        animate();
+
+        // ========== PAIR CODE STORAGE & LOGIC ==========
+        let currentPairCode = localStorage.getItem('redxmd_pair_code') || '';
+
+        const pairInput = document.getElementById('pairCodeInput');
+        const saveBtn = document.getElementById('savePairBtn');
+        const generateBtn = document.getElementById('generatePairBtn');
+        const toast = document.getElementById('toastMsg');
+
+        function showToast(msg, isError = false) {
+            toast.textContent = msg;
+            toast.style.background = isError ? '#3a0f0fe6' : '#1f0a0aee';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+
+        if (currentPairCode) {
+            pairInput.value = currentPairCode;
+            showToast('✅ Pair Code loaded from storage', false);
+        }
+
+        saveBtn.addEventListener('click', () => {
+            const newPair = pairInput.value.trim();
+            if (!newPair) {
+                showToast('❌ Please enter a valid Pair Code', true);
+                return;
+            }
+            if (newPair.length < 6) {
+                showToast('⚠️ Pair Code seems too short. Make sure it\'s correct!', true);
+            }
+            localStorage.setItem('redxmd_pair_code', newPair);
+            currentPairCode = newPair;
+            showToast('💾 Pair Code saved! Now deploy your bot with this code.', false);
+        });
+
+        generateBtn.addEventListener('click', () => {
+            // Show detailed guide for getting pair code from red_xmd repo
+            const guide = `HOW TO GET PAIR CODE FOR red_xmd BOT:
+
+1. Clone the repository:
+   git clone https://github.com/darknessfreenetsquad/red_xmd.git
+   cd red_xmd
+
+2. Install dependencies:
+   npm install
+
+3. Run the bot:
+   npm start
+
+4. Look for pairing code in terminal (should be 8 digits)
+
+5. Open WhatsApp → Settings → Linked Devices → Link with Phone Number
+
+6. Enter the 8-digit code shown in terminal
+
+7. The bot will generate SESSION_ID automatically
+
+8. Copy the PAIR_CODE shown and paste in the input field above`;
+
+            navigator.clipboard.writeText(guide).then(() => {
+                showToast('📋 Pair Code guide copied to clipboard! Follow steps.', false);
+            }).catch(() => {
+                showToast('Run "npm start" in your cloned repo to get Pair Code', false);
+            });
+        });
+
+        // ========== DEPLOYMENT FUNCTIONS WITH PAIR CODE ==========
+        const REPO_URL = "https://github.com/darknessfreenetsquad/red_xmd";
+        const REPO_NAME = "darknessfreenetsquad/red_xmd";
+
+        function getPairCodeForDeploy() {
+            let pairCode = pairInput.value.trim();
+            if (!pairCode) {
+                showToast('❌ Please enter your WhatsApp Pair Code first! Click "Get Pair Code Guide" for help.', true);
+                return null;
+            }
+            localStorage.setItem('redxmd_pair_code', pairCode);
+            return pairCode;
+        }
+
+        // RENDER - Web Service / Blueprint
+        function deployRender() {
+            const pairCode = getPairCodeForDeploy();
+            if (!pairCode) return;
+            
+            window.open('https://dashboard.render.com/select-repo?type=web', '_blank');
+            
+            const instructions = `RENDER DEPLOYMENT - red_xmd WhatsApp Bot
+
+1. Connect GitHub repo: ${REPO_URL}
+
+2. Choose "Web Service"
+
+3. Environment Variables (Config Vars) to add:
+   
+   PAIR_CODE = ${pairCode}
+   PREFIX = .
+   NODE_VERSION = 18
+   
+   (Add any other vars from your .env.example)
+
+4. Build Command: npm install
+
+5. Start Command: npm start
+
+6. Click "Deploy"
+
+⚠️ Keep PAIR_CODE secret!`;
+            
+            navigator.clipboard.writeText(instructions).then(() => {
+                showToast('📋 Render deployment instructions copied! Includes your Pair Code.', false);
+            }).catch(() => {
+                showToast('🟣 Open Render dashboard and add PAIR_CODE manually', false);
+            });
+        }
+
+        // HEROKU - GitHub Repo Method
+        function deployHeroku() {
+            const pairCode = getPairCodeForDeploy();
+            if (!pairCode) return;
+            
+            window.open('https://dashboard.heroku.com/new-app', '_blank');
+            
+            const herokuInstructions = `HEROKU DEPLOYMENT - red_xmd Bot (GitHub Method)
+
+1. Create new Heroku app
+
+2. Go to "Deploy" tab → "GitHub" → Connect repo: ${REPO_NAME}
+
+3. Enable Automatic Deploys from main branch
+
+4. Go to "Settings" → "Config Vars" → Add:
+
+   PAIR_CODE = ${pairCode}
+   PREFIX = .
+   NODE_ENV = production
+
+5. Deploy branch "main"
+
+6. Check logs: heroku logs --tail
+
+⚠️ Pair Code is required for WhatsApp authentication!`;
+            
+            navigator.clipboard.writeText(herokuInstructions).then(() => {
+                showToast('📋 Heroku setup copied! Pair Code included.', false);
+            });
+        }
+
+        // RAILWAY
+        function deployRailway() {
+            const pairCode = getPairCodeForDeploy();
+            if (!pairCode) return;
+            
+            window.open('https://railway.app/new', '_blank');
+            
+            const railwayInstructions = `RAILWAY DEPLOYMENT - red_xmd Bot
+
+1. Click "Deploy from GitHub repo"
+
+2. Select ${REPO_NAME}
+
+3. Go to Dashboard → Variables tab
+
+4. Add Environment Variables:
+   
+   PAIR_CODE = ${pairCode}
+   PREFIX = .
+   NODE_VERSION = 18
+
+5. Click "Deploy"
+
+6. Monitor logs in Deployments tab
+
+✅ Your bot should connect to WhatsApp using the Pair Code!`;
+            
+            navigator.clipboard.writeText(railwayInstructions).then(() => {
+                showToast('📋 Railway instructions copied! Pair Code ready.', false);
+            });
+        }
+
+        // Attach event listeners
+        document.getElementById('renderBtn').addEventListener('click', deployRender);
+        document.getElementById('herokuBtn').addEventListener('click', deployHeroku);
+        document.getElementById('railwayBtn').addEventListener('click', deployRailway);
+
+        // Extra particle effect on click
+        canvas.addEventListener('click', () => {
+            for(let i = 0; i < 10; i++) {
+                if(particles[i]) {
+                    particles[i].speedX += (Math.random() - 0.5) * 1.2;
+                    particles[i].speedY += (Math.random() - 0.5) * 1.2;
+                }
+            }
+            showToast('🐉 Red XMD Dragons Awaken!', false);
+        });
+    </script>
+</body>
+</html>

@@ -1,12 +1,12 @@
 {
     "description": "VolTah-session",
-    "main": "./voltah.js",
+    "main": "./index.js",
   "engines" : { 
     "npm" : ">=9.7.2",
     "node" : ">=20.0.0"
     },
     "scripts": {
-    "start": "node voltah.js"
+    "start": "node index.js"
   },
   "author": "Giddy Tennor",
   "license": "GPL-3.0 license",
